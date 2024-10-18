@@ -1,3 +1,4 @@
+import { PayloadAction } from "@reduxjs/toolkit";
 import { AxiosResponse } from "axios";
 import { ReactNode } from "react";
 
@@ -16,9 +17,11 @@ export type Task ={
 
 export type TaskCreate = Omit<Task, 'id' | 'completed'>;
 
+
 export type UpdateTaskOrderPayload = {
     tasks: Task[]; 
   };
+ 
 
 export type DeleteTaskResponse = {
     success: boolean;
@@ -27,12 +30,11 @@ export type DeleteTaskResponse = {
 
 export type UpdateTaskPayload = {
     id: string;
-    body: Partial<Task>;
+    body: Task;
   };
   
   export type UpdateTaskResponse = {
-    success: boolean;
-    task: Task; 
+    message: string;
   };
 
 export interface SortableItemProps {
@@ -54,6 +56,13 @@ export interface CustomError extends AxiosResponse {
  export interface TaskGetAllResponse {
     message: string;
     tasks: Task[];
+  }
+
+  export interface TaskGetResponse {
+    message: string;
+    data:{
+        task:Task
+    } ;
   }
   
 export interface TaskCreateResponse{

@@ -1,9 +1,9 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { AxiosError, AxiosResponse } from "axios";
+import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { AxiosResponse } from "axios";
 
 import { toast } from "react-toastify";
 import { create_task, delete_task, get_all_tasks, get_task, update_task, update_task_order } from "./taskApi";
-import { CustomError, DeleteTaskResponse, Task, TaskCreate, TaskCreateResponse, TaskGetAllResponse, UpdateTaskOrderPayload, UpdateTaskPayload, UpdateTaskResponse } from "@/types";
+import { CustomError, DeleteTaskResponse, Task, TaskCreate, TaskCreateResponse, TaskGetAllResponse, TaskGetResponse, UpdateTaskOrderPayload, UpdateTaskPayload, UpdateTaskResponse } from "@/types";
 
 
 
@@ -69,19 +69,19 @@ export const createTask = createAsyncThunk
 );
 
 export const getTask = createAsyncThunk
-<AxiosResponse<TaskGetAllResponse>,
+<AxiosResponse<TaskGetResponse>,
 { id: string;}, 
 { rejectValue: CustomError }
 >(
-  'v/getTask',
-  async ({id},{rejectWithValue }) => {
+  'task/getTask',
+  async ({id}) => {
     try {
       const response = await get_task(id)
       return response.data
     } catch (err) {
       const customError = err as CustomError
       toast.error(customError?.response?.data?.message)
-      return rejectWithValue(customError); 
+      Promise.reject(err)
     }
   }
 )
@@ -90,7 +90,7 @@ export const updateTask = createAsyncThunk<
 AxiosResponse<UpdateTaskResponse>, 
 UpdateTaskPayload, 
 { rejectValue: CustomError }
->('task/updateTask', async (data: any) => {
+>('task/updateTask', async (data:UpdateTaskPayload) => {
   try {
     const response = await update_task(data.id, data.body)
     return response.data
@@ -149,7 +149,7 @@ const taskSlice = createSlice({
 
   extraReducers: (builder) => {
     builder
-      .addCase(getAllTasks.pending, (state, action) => {
+      .addCase(getAllTasks.pending, (state) => {
        state.tasksLoading = true
       })
       .addCase(getAllTasks.fulfilled, (state, action) => {
@@ -165,13 +165,13 @@ const taskSlice = createSlice({
       .addCase(getTask.pending, (state) => {
       state.getTaskLoading = true
       })
-      .addCase(getTask.fulfilled, (state, action: any) => {
-         
+      .addCase(getTask.fulfilled, (state, action:any) => {
           state.getTaskLoading = false
           state.task = action.payload.data.task
       })
       .addCase(updateTask.fulfilled, (state, action: any) => {
-        toast.success(action.payload.message)
+       
+        toast.success(action.payload?.message)
           state.taskModalOpen = false
       })
       .addCase(deleteTask.fulfilled, (state, action: any) => {
