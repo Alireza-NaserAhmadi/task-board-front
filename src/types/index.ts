@@ -28,9 +28,14 @@ export type DeleteTaskResponse = {
     message: string;
   };  
 
+
 export type UpdateTaskPayload = {
     id: string;
-    body: Task;
+    body: {
+      title?: string;
+      description?: string;
+      completed?: boolean;
+    } ;
   };
   
   export type UpdateTaskResponse = {

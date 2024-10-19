@@ -1,5 +1,5 @@
 import { API_URL } from "@/config/config"
-import { Task, TaskCreate, UpdateTaskOrderPayload } from "@/types"
+import { TaskCreate, UpdateTaskOrderPayload, UpdateTaskPayload } from "@/types"
 import axios from "axios"
 
 
@@ -17,9 +17,9 @@ export function get_task(id:string) {
   return axios.get(API_URL + TASK + `/${id}`)
 }
 
-export function update_task(id:string,data:Task) {
+export function update_task(data:UpdateTaskPayload) {
 
-  return axios.put(API_URL + TASK + `/${id}`,data)
+  return axios.put(API_URL + TASK + `/${data.id}`,data.body)
 }
 
 export function delete_task(id: string) {

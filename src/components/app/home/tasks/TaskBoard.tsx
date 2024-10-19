@@ -24,7 +24,7 @@ import {
   updateTaskOrder,
 } from "./redux/taskSlice";
 import { Task } from "@/types";
-import { BeatLoader } from "react-spinners";
+import { HashLoader } from "react-spinners";
 
 const TaskBoard: React.FC = () => {
   const state = useSelector(taskState);
@@ -102,8 +102,8 @@ const TaskBoard: React.FC = () => {
         Add Task +
       </button>
       {state?.tasksLoading ? (
-        <div className="flex items-center justify-content w-full">
-          <BeatLoader size={3} color="white" />
+        <div className="flex items-center mt-5 justify-center h-14 w-full">
+          <HashLoader color="#5248AC" />
         </div>
       ) : (
         <>

@@ -92,7 +92,7 @@ UpdateTaskPayload,
 { rejectValue: CustomError }
 >('task/updateTask', async (data:UpdateTaskPayload) => {
   try {
-    const response = await update_task(data.id, data.body)
+    const response = await update_task(data)
     return response.data
   } catch (err) {
     const customError = err as CustomError
